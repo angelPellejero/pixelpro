@@ -1,0 +1,30 @@
+pixelpro_mis_cursos_homepage:
+    path:     /
+    defaults: { _controller: PixelproMisCursosBundle:Default:index }
+    
+pixelpro_mis_cursos_mostrar:
+    path:     /mostrar/{id}
+    defaults: { _controller: PixelproMisCursosBundle:Default:mostrar }
+    
+pixelpro_mis_cursos_crear:
+    path:     /crear/{id}
+    defaults: { _controller: PixelproMisCursosBundle:Default:crear }
+    requirements: {_method: post}
+
+pixelpro_mis_cursos_nuevo:
+    path:     /nuevo
+    defaults: { _controller: PixelproMisCursosBundle:Default:nuevo }
+
+pixelpro_mis_cursos_editar:
+    path:     /editar/{id}
+    defaults: { _controller: PixelproMisCursosBundle:Default:editar }
+    
+pixelpro_mis_cursos_actualizar:
+    path:     /actualizar/{id}
+    defaults: { _controller: PixelproMisCursosBundle:Default:actualizar }
+    requirements: {_method: post|put}
+    
+pixelpro_mis_cursos_eliminar:
+    path:     /eliminar/{id}
+    defaults: { _controller: PixelproMisCursosBundle:Default:eliminar }
+    requirements: {_method: post|delete}
