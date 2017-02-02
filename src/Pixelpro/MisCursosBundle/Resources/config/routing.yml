@@ -7,7 +7,7 @@ pixelpro_mis_cursos_mostrar:
     defaults: { _controller: PixelproMisCursosBundle:Default:mostrar }
     
 pixelpro_mis_cursos_crear:
-    path:     /crear/{id}
+    path:     /crear
     defaults: { _controller: PixelproMisCursosBundle:Default:crear }
     requirements: {_method: post}
 

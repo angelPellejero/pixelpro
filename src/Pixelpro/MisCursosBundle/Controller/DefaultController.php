@@ -4,27 +4,48 @@ namespace Pixelpro\MisCursosBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Pixelpro\MisCursosBundle\Form\CursosType;
+use Pixelpro\MisCursosBundle\Entity\Cursos;
 
 class DefaultController extends Controller {
 
     public function indexAction() {
-        return $this->render('PixelproMisCursosBundle:Default:index.html.twig');
+        $em = $this->getDoctrine()->getManager();
+        $cursos = $em->getRepository('PixelproMisCursosBundle:Cursos')->findAll(); //buscar todos los cursos
+        return $this->render('PixelproMisCursosBundle:Default:index.html.twig', array('cursos' => $cursos));
     }
 
     public function mostrarAction($id) {
-         return $this->render('PixelproMisCursosBundle:Default:mostrar.html.twig');
+        $em = $this->getDoctrine()->getManager();
+        $curso = $em->getRepository('PixelproMisCursosBundle:Cursos')->find($id); //buscar el curso por el id
+        return $this->render('PixelproMisCursosBundle:Default:mostrar.html.twig', array('curso' => $curso)); //a la vista le paso el objeto
     }
 
     public function crearAction(Request $request) {
-        
+        $curso = new Cursos();
+        $form = $this->createForm(CursosType::class, $curso, array('action' => $this->generateUrl('pixelpro_mis_cursos_crear'), 'method' => 'POST'));
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            $em = $this->getDoctrine()->getManager(); //manejador de doctrine
+            $em->persist($curso); //crear una query
+            $em->flush(); //ejecutar query
+
+            $this->get('session')->getFlashBag()->add('notif', 'Curso creado correctamente!');
+
+            return $this->redirect($this->generateUrl('pixelpro_mis_cursos_mostrar', array('id' => $curso->getId()))); //redirigimos a la vista para meter mas cursos
+        }
+        $this->get('session')->getFlashBag()->add('notif', 'Curso no creado correctamente!');
+        return $this->render('PixelproMisCursosBundle:Default:nuevo.html.twig', array('form' => $form->createView()));
     }
 
     public function nuevoAction() {
-        return $this->render('PixelproMisCursosBundle:Default:nuevo.html.twig'); 
+        $curso = new Cursos();
+        $form = $this->createForm(CursosType::class, $curso, array('action' => $this->generateUrl('pixelpro_mis_cursos_crear'), 'method' => 'POST'));
+        return $this->render('PixelproMisCursosBundle:Default:nuevo.html.twig', array('form' => $form->createView()));
     }
 
     public function editarAction($id) {
-         return $this->render('PixelproMisCursosBundle:Default:editar.html.twig');
+        return $this->render('PixelproMisCursosBundle:Default:editar.html.twig');
     }
 
     public function actualizarAction(Request $request, $id) {
